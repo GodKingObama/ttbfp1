@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TikTok Clone</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen">
+        <div class="logo-container">
+            <div class="logo-placeholder">T</div>
+        </div>
+        <div class="app-title">Tiktok But For Porn</div>
+        <div class="app-subtitle">Scroll with one hand</div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-logo">T</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search tags...">
+            </div>
+        </header>
+
+        <!-- Feed Selector -->
+        <div class="feed-selector">
+            <button class="feed-tab active" data-feed="foryou">For You</button>
+            <button class="feed-tab" data-feed="explore">Explore</button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="media-container">
+                <div class="loading" style="display: none;">Loading...</div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-nav="home">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Home</div>
+            </button>
+            <button class="nav-item" data-nav="liked">
+                <div class="nav-icon">❤️</div>
+                <div class="nav-label">Liked</div>
+            </button>
+            <button class="nav-item" data-nav="saved">
+                <div class="nav-icon">🔖</div>
+                <div class="nav-label">Saved</div>
+            </button>
+            <button class="nav-item" data-nav="profile">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Profile</div>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">×</button>
+            <div class="modal-title">Welcome</div>
+            
+            <!-- Login Form -->
+            <div id="login-section">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="login-username" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="login-password" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                
+                <button type="button" class="btn-secondary" onclick="showRegister()">
+                    Create New Account
+                </button>
+                
+                <button type="button" id="guest-btn" class="btn-secondary">
+                    Continue as Guest
+                </button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-section" style="display: none;">
+                <form id="register-form">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">I'm interested in:</label>
+                        <div class="gender-options">
+                            <button type="button" class="gender-option" data-value="men">Men</button>
+                            <button type="button" class="gender-option" data-value="women">Women</button>
+                            <button type="button" class="gender-option" data-value="both">Both</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Choose your interests:</label>
+                        <div class="tags-grid" id="register-tags">
+                            <!-- Tags will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Create Account</button>
+                </form>
+                
+                <button type="button" class="btn-secondary" onclick="showLogin()">
+                    Back to Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">×</button>
+            <div class="modal-title">Profile</div>
+            
+            <div class="profile-section">
+                <h3>Your Interests</h3>
+                <p style="color: var(--medium-gray); font-size: 14px; margin-bottom: 15px;">
+                    Double-click to edit or delete tags
+                </p>
+                <div class="tags-grid" id="selected-tags">
+                    <!-- Selected tags will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3>Suggested for You</h3>
+                <p style="color: var(--medium-gray); font-size: 14px; margin-bottom: 15px;">
+                    Swipe left to ignore, up to keep, right to add to interests
+                </p>
+                <div class="tags-grid" id="algorithm-tags">
+                    <!-- Algorithm suggested tags will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">×</button>
+            <div class="modal-title">Comments</div>
+            
+            <div class="comments-container">
+                <!-- Comments will be loaded here -->
+            </div>
+            
+            <form class="comment-form">
+                <input type="text" class="comment-input" placeholder="Add a comment..." required>
+                <button type="submit" class="comment-submit">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <script>
+        function showRegister() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('register-section').style.display = 'block';
+            loadRegistrationTags();
+        }
+        
+        function showLogin() {
+            document.getElementById('register-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'block';
+        }
+        
+        function loadRegistrationTags() {
+            fetch('/tags')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('register-tags');
+                    container.innerHTML = data.tags.map(tag => 
+                        `<div class="tag-item" data-tag-id="${tag.id}" onclick="toggleTagSelection(this)">
+                            ${tag.name}
+                        </div>`
+                    ).join('');
+                })
+                .catch(error => console.error('Failed to load tags:', error));
+        }
+        
+        function toggleTagSelection(element) {
+            element.classList.toggle('selected');
+        }
+        
+        // Gender selection
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('gender-option')) {
+                document.querySelectorAll('.gender-option').forEach(btn => 
+                    btn.classList.remove('selected'));
+                e.target.classList.add('selected');
+            }
+        });
+    </script>
+</body>
+</html>
